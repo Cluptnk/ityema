@@ -1,0 +1,18 @@
+body.ilca-status-page { background: #eef3f9; }
+.ilca-status-wrapper { padding: 26px 22px 38px; }
+.ilca-status-heading { align-items: end; display: flex; justify-content: space-between; margin: 0 0 20px; }
+.ilca-status-heading span { color: #687a94; font-size: 11px; font-weight: 800; letter-spacing: .1em; }
+.ilca-status-heading h1 { color: #20385d; font-size: 28px; font-weight: 800; margin: 5px 0 0; }
+.ilca-status-heading h1 i { color: #4a82b8; }
+.ilca-status-heading > small { color: #70809a; padding-bottom: 4px; }
+.ilca-summary { margin-bottom: 20px; }
+.ilca-metric-card { background: #fff; border: 1px solid #dce5ef; border-radius: 10px; box-shadow: 0 5px 18px rgba(28, 53, 88, .07); min-height: 100px; padding: 18px 20px; }
+.ilca-metric-card span { color: #63748e; font-size: 14px; font-weight: 700; }
+.ilca-metric-card strong { color: #20385d; display: block; font-size: 31px; line-height: 1.05; margin-top: 6px; }
+.metric-live { border-left: 5px solid #4d9a56; }.metric-offline { border-left: 5px solid #b74141; }.metric-total { border-left: 5px solid #4a82b8; }
+.ilca-table-panel { background: #fff; border: 1px solid #d9e3ef; border-radius: 10px; box-shadow: 0 5px 18px rgba(28, 53, 88, .07); overflow: hidden; }
+.ilca-table-panel > header { align-items: center; border-bottom: 1px solid #dce5ef; display: flex; justify-content: space-between; padding: 15px 18px; }
+.ilca-table-panel h2 { color: #294365; font-size: 17px; font-weight: 800; margin: 0; }.ilca-table-panel h2 i { color: #4b82b6; }.ilca-table-panel header small { color: #728199; }
+#ilca-status-table { margin: 0; min-width: 1300px; } #ilca-status-table thead th { background: #f5f8fc; border-bottom: 1px solid #d8e2ee; color: #5c6f8a; font-size: 11px; font-weight: 800; letter-spacing: .035em; text-transform: uppercase; white-space: nowrap; } #ilca-status-table thead th.ilca-sortable { cursor: pointer; padding-right: 22px; position: relative; user-select: none; } #ilca-status-table thead th.ilca-sortable:after { color: #93a4bb; content: '↕'; font-size: 13px; position: absolute; right: 8px; } #ilca-status-table thead th.ilca-sortable.is-sorted { background: #eaf2fb; color: #294f7e; } #ilca-status-table thead th.ilca-sortable.is-sorted:after { color: #3972aa; content: '↑'; } #ilca-status-table thead th.ilca-sortable.is-sorted.is-desc:after { content: '↓'; } #ilca-status-table thead th.ilca-sortable:focus { box-shadow: inset 0 0 0 2px #6b9fd0; outline: none; } #ilca-status-table tbody td { color: #233c5d; font-size: 13px; vertical-align: middle; white-space: nowrap; } #ilca-status-table tbody tr:hover { background: #f7fbff; }.ilca-loom-name { font-weight: 800; }
+.status-badge,.map-status-badge { border-radius: 14px; color: #fff; display: inline-block; font-size: 12px; font-weight: 800; min-width: 94px; padding: 5px 9px; text-align: center; }.status-live,.map-status-running { background: #4e9a56; }.status-offline,.map-status-offline { background: #ae4242; }.map-status-manual { background: #a98426; }.map-status-cone { background: #7860a5; }.map-status-weft { background: #2e7f8e; }.map-status-warp { background: #526cb3; }.map-status-stopped { background: #a65858; }.status-waiting { background: #8693a5; }
+@media (max-width: 767px) { .ilca-status-wrapper { padding: 18px 12px 28px; }.ilca-status-heading { align-items: start; flex-direction: column; gap: 7px; }.ilca-status-heading h1 { font-size: 23px; }.ilca-summary > div { margin-bottom: 10px; }.ilca-table-panel > header { align-items: start; flex-direction: column; gap: 4px; }.ilca-table-panel { border-radius: 8px; } }

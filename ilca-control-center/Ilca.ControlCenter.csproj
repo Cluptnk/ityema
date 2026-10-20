@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DeploymentDirectory>\\192.168.2.5\c\Users\Administrator\Desktop\publish\</DeploymentDirectory>
+    <DeploymentFileName>Ilca.ControlCenter-$([System.DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss')).exe</DeploymentFileName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySqlConnector" Version="2.4.0" />
+  </ItemGroup>
+
+  <Target Name="DeployPublishedExecutable" AfterTargets="Publish">
+    <Copy SourceFiles="$(PublishDir)Ilca.ControlCenter.exe"
+          DestinationFiles="$(DeploymentDirectory)$(DeploymentFileName)"
+          SkipUnchangedFiles="true"
+          Retries="0"
+          RetryDelayMilliseconds="0"
+          ContinueOnError="WarnAndContinue" />
+  </Target>
+</Project>

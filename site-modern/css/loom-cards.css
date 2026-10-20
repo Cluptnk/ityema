@@ -1,0 +1,491 @@
+/* Ana görünüm: masaüstünde konumlu harita, mobilde duyarlı tezgâh kartları. */
+.loom-map-view #droppable2 > .panel {
+    border-radius: 7px !important;
+    border-color: #d8e1e9 !important;
+    box-shadow: 0 4px 11px rgba(20, 44, 69, .14);
+}
+.loom-map-view #droppable2 > .panel:hover { box-shadow: 0 7px 16px rgba(20, 44, 69, .23); }
+.loom-map-view #droppable2 > .panel:has(.icon-manuale),
+.loom-card-view #droppable2 > .panel:has(.icon-manuale) { border: 4px solid #f0b0a0 !important; box-shadow: 0 4px 11px rgba(20, 44, 69, .18), 0 0 0 1px rgba(240, 176, 160, .4) !important; }
+.loom-map-view #droppable2 > .panel:has(.icon-run),
+.loom-card-view #droppable2 > .panel:has(.icon-run) { border: 4px solid #39e639 !important; box-shadow: 0 4px 11px rgba(20, 44, 69, .18), 0 0 0 1px rgba(57, 230, 57, .45) !important; }
+.loom-map-view #droppable2 > .panel:has(.icon-rocca),
+.loom-card-view #droppable2 > .panel:has(.icon-rocca) { border: 4px solid #c65454 !important; box-shadow: 0 4px 11px rgba(20, 44, 69, .18), 0 0 0 1px rgba(198, 84, 84, .4) !important; }
+.loom-map-view #droppable2 > .panel:has(.icon-trama),
+.loom-card-view #droppable2 > .panel:has(.icon-trama) { border: 4px solid #f02828 !important; box-shadow: 0 4px 11px rgba(20, 44, 69, .18), 0 0 0 1px rgba(240, 40, 40, .4) !important; }
+.loom-map-view #droppable2 > .panel:has(.icon-ordito),
+.loom-card-view #droppable2 > .panel:has(.icon-ordito) { border: 4px solid #1428aa !important; box-shadow: 0 4px 11px rgba(20, 44, 69, .18), 0 0 0 1px rgba(20, 40, 170, .4) !important; }
+.loom-daily-stop-summary { font-size: 11px; }
+.loom-daily-stop-row { display: flex; align-items: center; justify-content: space-between; }
+.loom-daily-stop-row span { font-weight: 650; }
+.loom-daily-stop-row strong { font-variant-numeric: tabular-nums; }
+
+/* Harita kartında her bilgi kendi sütununda kalır; uzun Armür adı taşmaz. */
+.loom-map-view #droppable2 > .panel {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.loom-map-view #droppable2 .panel-cmdd-heading {
+    display: flex;
+    align-items: center;
+    min-height: 25px;
+    padding: 3px 5px;
+    line-height: 17px;
+}
+.loom-map-view #droppable2 .panel-cmdd-title {
+    flex: 1;
+    min-width: 0;
+    margin: 0 !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    line-height: 17px;
+}
+.loom-map-view #droppable2 .panel-cmdd-heading > .glyphicon { margin-left: 3px; font-size: 13px; }
+.loom-map-view #droppable2 .panel-cmdd-body { padding: 3px 5px; }
+.loom-map-view #droppable2 .panel-cmdd-body > .row:not(.row-segnalation) {
+    display: grid;
+    grid-template-columns: 44% minmax(0, 1fr) 28px;
+    align-items: center;
+    min-height: 12px;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 11px;
+}
+.loom-map-view #droppable2 .panel-cmdd-body > .row:not(.row-segnalation) > span {
+    float: none !important;
+    width: auto !important;
+    min-width: 0;
+    padding: 0 2px !important;
+}
+.loom-map-view #droppable2 .panel-cmdd-body .label-primary {
+    color: #24313d !important;
+    background: #e7ebef !important;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    text-align: center;
+}
+.loom-map-view #droppable2 .panel-cmdd-body .label-cmdd {
+    color: #101820 !important;
+    background: transparent !important;
+    font-size: 9px;
+    font-weight: 650;
+    text-align: right;
+}
+.loom-map-view #droppable2 .panel-cmdd-body .label-cmdd-ellipse {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.loom-map-view #droppable2 .panel-cmdd-body .loom-armur-row > :last-child { display: none; }
+.loom-map-view #droppable2 .panel-cmdd-body .loom-armur-row > :nth-child(2) { grid-column: 2 / -1; }
+.loom-map-view #droppable2 .panel-cmdd-body .loom-source-field { display: none !important; }
+.loom-map-view #droppable2 .loom-card-clean-data { display: block; }
+.loom-map-view #droppable2 .loom-card-data-row {
+    display: grid;
+    grid-template-columns: 44% minmax(0, 1fr) 28px;
+    align-items: center;
+    min-height: 12px;
+    line-height: 11px;
+}
+.loom-map-view #droppable2 .loom-card-data-label {
+    padding: 0 2px;
+    color: #24313d;
+    background: #e7ebef;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    text-align: center;
+}
+.loom-map-view #droppable2 .loom-card-data-value,
+.loom-map-view #droppable2 .loom-card-data-unit {
+    min-width: 0;
+    padding: 0 2px;
+    overflow: hidden;
+    color: #101820;
+    font-size: 9px;
+    font-weight: 650;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.loom-map-view #droppable2 .loom-card-wide-value .loom-card-data-value { grid-column: 2 / -1; }
+.loom-map-view #droppable2 .loom-card-wide-value .loom-card-data-unit { display: none; }
+.loom-map-view #droppable2 .loom-daily-stop-summary {
+    clear: both;
+    margin-top: 2px;
+    padding: 2px 4px;
+    background: #f3f6f8;
+    border-top: 1px solid #dbe3e9;
+    border-radius: 3px;
+}
+.loom-map-view #droppable2 .loom-daily-stop-row { min-height: 11px; line-height: 11px; }
+.loom-map-view #droppable2 .loom-daily-stop-row span { color: #344452; font-size: 9px; }
+.loom-map-view #droppable2 .loom-daily-stop-row strong { color: #111d27; font-size: 9px; }
+
+@media (min-width: 768px) {
+    .loom-map-view .loom-map-controls { display: block; }
+    .loom-map-view .loom-filter-controls { display: block; }
+}
+
+/* Telefon ekranında harita koordinatları yerine tek sütun kart listesi açılır. */
+@media (max-width: 767px) {
+    .loom-map-view #page-wrapper { padding: 10px; }
+}
+
+.loom-card-view #page-wrapper { padding-top: 18px; }
+.loom-card-view #buttonRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 16px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--im-line);
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(20, 44, 69, .06);
+}
+.loom-card-view #buttonRow > div { float: none; }
+.loom-card-view .loom-view-title { flex: 1; }
+.loom-card-view .loom-view-title h4 { margin: 0; color: var(--im-ink); font-size: 20px; font-weight: 650; }
+.loom-card-view .loom-map-controls { display: none; }
+.loom-card-view .loom-filter-controls { margin-left: auto; }
+.loom-card-view .loom-filter-controls .btn { min-width: 46px; margin-right: 5px; }
+.loom-card-view .loom-mobile-filter-summary { display: none; }
+.loom-card-view #droppable2 > .panel.mobile-filter-hidden { display: none !important; }
+
+.loom-card-view #droppable2 {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    overflow: visible !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+.loom-card-view #imgdroppable { display: none !important; }
+.loom-card-view #droppable2 > .panel {
+    display: block !important;
+    float: none !important;
+    position: relative !important;
+    transform: none !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 172px;
+    margin: 0 !important;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--im-line) !important;
+    border-radius: 12px !important;
+    background: #fff;
+    box-shadow: 0 6px 17px rgba(20, 44, 69, .08);
+    transition: transform .16s ease, box-shadow .16s ease;
+}
+.loom-card-view #droppable2 > .panel:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 13px 26px rgba(20, 44, 69, .16);
+}
+.loom-card-view #droppable2 > .panel:has(.panel-cmdd-heading.offline) { opacity: .62 !important; filter: grayscale(.38); }
+.loom-card-view #droppable2 .panel-cmdd-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 54px;
+    padding: 13px 14px;
+    color: #fff !important;
+    background: linear-gradient(135deg, #183b5d, #112b46) !important;
+    border: 0 !important;
+}
+.loom-card-view #droppable2 .panel-cmdd-heading.offline { background: linear-gradient(135deg, #68798a, #4d5d6b) !important; }
+.loom-card-view #droppable2 .panel-cmdd-title {
+    flex: 1;
+    max-width: calc(100% - 28px);
+    margin: 0 !important;
+    overflow: hidden;
+    color: #fff !important;
+    font-size: 16px !important;
+    font-weight: 700;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.loom-card-view #droppable2 .panel-cmdd-heading > .glyphicon { color: #76e5b7; font-size: 16px; }
+.loom-card-view #droppable2 .panel-cmdd-body {
+    min-height: 0 !important;
+    padding: 11px 14px 13px !important;
+    background: #fff;
+}
+.loom-card-view #droppable2 .panel-cmdd-body > .row:not(.row-segnalation) {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr auto;
+    align-items: center;
+    gap: 7px;
+    min-height: 28px;
+    margin: 0 !important;
+    padding: 3px 0 !important;
+    border-bottom: 1px solid #edf1f5;
+}
+.loom-card-view #droppable2 .panel-cmdd-body > .row:not(.row-segnalation):last-of-type { border-bottom: 0; }
+.loom-card-view #droppable2 .panel-cmdd-body .col-xs-2,
+.loom-card-view #droppable2 .panel-cmdd-body .col-xs-3,
+.loom-card-view #droppable2 .panel-cmdd-body .col-xs-4,
+.loom-card-view #droppable2 .panel-cmdd-body .col-xs-5,
+.loom-card-view #droppable2 .panel-cmdd-body .col-xs-8,
+.loom-card-view #droppable2 .panel-cmdd-body .col-xs-12 { float: none !important; width: auto !important; padding: 0 !important; }
+.loom-card-view #droppable2 .label { border-radius: 0; }
+.loom-card-view #droppable2 .label-primary {
+    color: #607386 !important;
+    background: transparent !important;
+    font-size: 11px;
+    font-weight: 650;
+    text-align: left;
+}
+.loom-card-view #droppable2 .label-cmdd {
+    color: var(--im-ink) !important;
+    background: transparent !important;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+}
+.loom-card-view #droppable2 .panel-cmdd-body .row > span:last-child {
+    min-width: 30px;
+    color: var(--im-muted) !important;
+    font-size: 11px;
+    text-align: right;
+}
+.loom-card-view #droppable2 .row-segnalation { position: static !important; margin: 6px 0 0 !important; }
+.loom-card-view #droppable2 .panel-cmdd-body .loom-armur-row > :last-child { display: none; }
+.loom-card-view #droppable2 .panel-cmdd-body .loom-armur-row > :nth-child(2) { grid-column: 2 / -1; }
+.loom-card-view #droppable2 .panel-cmdd-body .loom-source-field { display: none !important; }
+.loom-card-view #droppable2 .loom-card-clean-data { display: grid; gap: 0; }
+.loom-card-view #droppable2 .loom-card-data-row {
+    display: grid;
+    grid-template-columns: 1.25fr minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 7px;
+    min-height: 28px;
+    padding: 3px 0;
+    border-bottom: 1px solid #edf1f5;
+}
+.loom-card-view #droppable2 .loom-card-data-label { color: #607386; font-size: 11px; font-weight: 650; }
+.loom-card-view #droppable2 .loom-card-data-value {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--im-ink);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.loom-card-view #droppable2 .loom-card-data-unit { color: var(--im-muted); font-size: 11px; text-align: right; }
+.loom-card-view #droppable2 .loom-card-wide-value .loom-card-data-value { grid-column: 2 / -1; }
+.loom-card-view #droppable2 .loom-card-wide-value .loom-card-data-unit { display: none; }
+.loom-card-view #droppable2 .loom-daily-stop-summary {
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: #f4f7f9;
+    border: 1px solid #e1e8ee;
+    border-radius: 7px;
+}
+.loom-card-view #droppable2 .loom-daily-stop-heading {
+    margin-bottom: 4px;
+    color: #607386;
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: .02em;
+}
+.loom-card-view #droppable2 .loom-daily-stop-row { min-height: 25px; color: #516777; }
+.loom-card-view #droppable2 .loom-daily-stop-row strong { color: var(--im-ink); font-size: 13px; }
+
+@media (max-width: 767px) {
+    .loom-card-view #page-wrapper { padding: 10px; }
+    .loom-card-view #buttonRow { align-items: stretch; flex-wrap: wrap; padding: 13px; }
+    .loom-card-view .loom-view-title { flex-basis: 100%; }
+    .loom-card-view .loom-filter-controls { margin-left: 0; }
+    .loom-card-view .loom-filter-controls .btn {
+        min-width: 48px;
+        min-height: 44px;
+        margin-right: 4px;
+        border-width: 1px;
+        transition: background .16s ease, box-shadow .16s ease, transform .16s ease;
+    }
+    .loom-card-view .loom-filter-controls .btn.mobile-filter-active {
+        background: #eaf2fb;
+        border-color: #254e77;
+        box-shadow: inset 0 -3px 0 #254e77, 0 0 0 2px rgba(37, 78, 119, .14);
+        transform: translateY(-1px);
+    }
+    .loom-card-view .loom-mobile-filter-summary {
+        display: block;
+        margin-top: 9px;
+        color: var(--im-muted);
+        font-size: 12px;
+        font-weight: 650;
+    }
+    .loom-card-view #droppable2 { grid-template-columns: 1fr; gap: 12px; }
+    .loom-card-view #droppable2 > .panel { min-height: 0; }
+    .loom-card-view #droppable2 .panel-cmdd-heading { min-height: 50px; }
+    .loom-card-view #droppable2 .panel-cmdd-title { font-size: 15px !important; }
+}
+
+/* Eski widget yalnızca canlı veriyi ve harita davranışını sağlamaya devam eder.
+   Görünen kart, tüm yönlerde aynı olan bu özel bileşendir. */
+#droppable2 > .panel.loom-owned-card-ready > .panel-cmdd-heading,
+#droppable2 > .panel.loom-owned-card-ready > .panel-cmdd-body { display: none !important; }
+.loom-map-view #droppable2 > .panel.loom-owned-card-ready { position: absolute !important; overflow: hidden; }
+.loom-owned-card {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    overflow: hidden;
+    color: #152536;
+    background: #fff;
+    font-family: Arial, sans-serif;
+}
+.loom-owned-card-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 25px;
+    padding: 3px 5px;
+    color: #fff;
+    background: #344350;
+}
+.loom-owned-card-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.loom-owned-card-status { font-size: 14px; line-height: 1; }
+.loom-status-running .loom-owned-card-status { color: #72ed45; }
+.loom-status-manual .loom-owned-card-status { color: #f2b4a4; }
+.loom-status-rocca .loom-owned-card-status { color: #c65454; }
+.loom-status-trama .loom-owned-card-status { color: #f02828; }
+.loom-status-ordito .loom-owned-card-status { color: #5269ef; }
+.loom-status-unknown .loom-owned-card-status { color: #c8d0d7; }
+.loom-owned-card-data { padding: 3px 5px 2px; }
+.loom-owned-card-row {
+    display: grid;
+    grid-template-columns: 43% minmax(0, 1fr) 28px;
+    align-items: center;
+    min-height: 12px;
+    line-height: 11px;
+}
+.loom-owned-card-label {
+    padding: 0 2px;
+    color: #263442;
+    background: #e7ebef;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    text-align: center;
+}
+.loom-owned-card-value,
+.loom-owned-card-unit {
+    min-width: 0;
+    padding: 0 2px;
+    overflow: hidden;
+    font-size: 9px;
+    font-weight: 650;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.loom-owned-card-wide .loom-owned-card-value { grid-column: 2 / -1; }
+.loom-owned-card-wide .loom-owned-card-unit { display: none; }
+.loom-owned-card-stops {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1px 5px;
+    margin-top: auto;
+    padding: 3px 5px;
+    color: #304353;
+    background: #eff5f2;
+    border-top: 1px solid #cfe0d5;
+    font-size: 9px;
+    line-height: 11px;
+}
+.loom-owned-card-stops strong { color: #10222f; font-size: 9px; text-align: right; }
+
+@media (max-width: 767px) {
+    .loom-card-view #droppable2 > .panel.loom-modern-card-active > .panel-cmdd-heading,
+    .loom-card-view #droppable2 > .panel.loom-modern-card-active > .panel-cmdd-body { display: none !important; }
+    .loom-card-view #droppable2 > .panel.loom-owned-card-ready { overflow: visible; }
+    .loom-card-view .loom-owned-card { position: relative; inset: auto; min-height: 0; }
+    .loom-card-view .loom-owned-card-header { min-height: 50px; padding: 12px 14px; }
+    .loom-card-view .loom-owned-card-title { font-size: 16px; line-height: 20px; }
+    .loom-card-view .loom-owned-card-status { font-size: 18px; }
+    .loom-card-view .loom-owned-card-data { padding: 10px 14px 6px; }
+    .loom-card-view .loom-owned-card-row {
+        grid-template-columns: 1.25fr minmax(0, 1fr) auto;
+        gap: 7px;
+        min-height: 28px;
+        padding: 3px 0;
+        border-bottom: 1px solid #edf1f5;
+        line-height: normal;
+    }
+    .loom-card-view .loom-owned-card-label { padding: 0; color: #607386; background: transparent; font-size: 11px; font-weight: 650; text-align: left; }
+    .loom-card-view .loom-owned-card-value { font-size: 13px; }
+    .loom-card-view .loom-owned-card-unit { color: var(--im-muted); font-size: 11px; }
+    .loom-card-view .loom-owned-card-stops { padding: 8px 14px 10px; font-size: 12px; line-height: 20px; }
+    .loom-card-view .loom-owned-card-stops strong { font-size: 13px; }
+}
+
+/* Güvenli harita kartı düzeni: eski widgetın veri yapısını korur ve duruş
+   özetine kartın tabanında sabit bir alan ayırır. */
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .panel-cmdd-body {
+    box-sizing: border-box;
+    height: calc(100% - 31px);
+    min-height: 0 !important;
+    padding: 3px 5px 28px;
+    overflow: hidden;
+}
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .panel-cmdd-body > .row:not(.row-segnalation) {
+    display: block !important;
+    min-height: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 12px;
+}
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .panel-cmdd-body > .row:not(.row-segnalation) > span {
+    float: left !important;
+    min-width: 0;
+    padding: 0 2px !important;
+}
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .panel-cmdd-body > .row > .col-xs-2 { width: 16.66666667% !important; }
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .panel-cmdd-body > .row > .col-xs-3 { width: 25% !important; }
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .panel-cmdd-body > .row > .col-xs-4 { width: 33.33333333% !important; }
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .panel-cmdd-body > .row > .col-xs-5 { width: 41.66666667% !important; }
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .panel-cmdd-body > .row > .col-xs-8 { width: 66.66666667% !important; }
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .loom-daily-stop-summary {
+    position: absolute;
+    right: 5px;
+    bottom: 3px;
+    left: 5px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1px 5px;
+    margin: 0;
+    padding: 2px 4px;
+    color: #304353;
+    background: #eff5f2;
+    border-top: 1px solid #cfe0d5;
+    border-radius: 3px;
+    font-size: 9px;
+    line-height: 10px;
+}
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .loom-daily-stop-row { display: contents; }
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .loom-daily-stop-row span { font-size: 9px; }
+.loom-map-view #droppable2 > .panel:not(.loom-owned-card-ready) .loom-daily-stop-row strong { color: #10222f; font-size: 9px; text-align: right; }

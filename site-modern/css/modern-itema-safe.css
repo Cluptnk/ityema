@@ -1,0 +1,88 @@
+/* iMANAGER modern tema — mevcut SB Admin yerleşimini korur. */
+:root {
+    --itema-red: #d62d27;
+    --itema-red-dark: #af211d;
+    --itema-ink: #1c2735;
+    --itema-muted: #617083;
+    --itema-bg: #f3f6fa;
+    --itema-line: #dbe3ec;
+    --itema-card: #ffffff;
+}
+
+body {
+    background: var(--itema-bg);
+    color: var(--itema-ink);
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+#page-wrapper { background: var(--itema-bg); }
+a { color: var(--itema-red); }
+a:hover, a:focus { color: var(--itema-red-dark); }
+
+/* Üst çubuk: boyut ve konum eski tema tarafından belirlenir. */
+.navbar-inverse,
+.navbar-inverse .navbar-collapse,
+.navbar-inverse .navbar-form,
+.navbar-header,
+.top-nav { background-color: #fff !important; border-color: var(--itema-line); }
+.navbar-inverse { border-bottom: 1px solid var(--itema-line); box-shadow: 0 2px 12px rgba(28, 39, 53, .08); }
+.navbar-inverse .navbar-nav > li > a,
+.top-nav > li > a { color: #526174 !important; }
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus,
+.top-nav > li > a:hover,
+.top-nav > li > a:focus,
+.top-nav > .open > a { color: var(--itema-red) !important; background: #fff1f1 !important; }
+.navbar-inverse .navbar-brand { color: var(--itema-ink) !important; }
+.navbar-toggle { border-color: #ccd6e1; }
+.navbar-toggle .icon-bar { background: var(--itema-ink) !important; }
+.badge { background: var(--itema-red); }
+
+/* Sol menü: yalnızca renk; genişlik/sol boşluk/konum değiştirilmez. */
+.side-nav { background-color: #202b38 !important; border-right-color: #15202d !important; }
+.side-nav > li > a { color: #d6dee8 !important; border-left: 3px solid transparent; }
+.side-nav li a:hover,
+.side-nav li a:focus { color: #fff !important; background-color: #344557 !important; border-left-color: var(--itema-red); }
+.side-nav > li > ul { background: #18222e; }
+.side-nav > li > ul > li > a { color: #bdc9d6; }
+
+.page-header { color: var(--itema-ink); border-bottom-color: var(--itema-line); font-weight: 600; }
+.page-header small { color: #778598; }
+.panel, .well, .modal-content {
+    border: 1px solid var(--itema-line);
+    border-radius: 9px;
+    box-shadow: 0 5px 18px rgba(28, 39, 53, .07);
+}
+.panel-default > .panel-heading,
+.panel-primary > .panel-heading {
+    background: #fff;
+    color: var(--itema-ink);
+    border-bottom-color: var(--itema-line);
+    font-weight: 600;
+}
+.panel-primary > .panel-heading { border-top: 3px solid var(--itema-red); }
+.panel-footer { background: #f8fafc; border-top-color: var(--itema-line); }
+.well { background: #fff; }
+
+.btn { border-radius: 6px; font-weight: 600; }
+.btn-primary, .btn-success { background-color: var(--itema-red); border-color: var(--itema-red); }
+.btn-primary:hover, .btn-primary:focus,
+.btn-success:hover, .btn-success:focus { background-color: var(--itema-red-dark); border-color: var(--itema-red-dark); }
+.btn-default { color: #344557; background: #edf2f7; border-color: #d3dde8; }
+.form-control { border-color: #cbd6e2; border-radius: 6px; box-shadow: none; }
+.form-control:focus { border-color: var(--itema-red); box-shadow: 0 0 0 3px rgba(214, 45, 39, .12); }
+
+.table { background: #fff; }
+.table > thead > tr > th { color: #536174; background: #f7f9fc; border-bottom-color: var(--itema-line); }
+.table > tbody > tr > td { border-top-color: #e8edf3; vertical-align: middle; }
+.table-hover > tbody > tr:hover { background: #fff5f5; }
+
+@media (max-width: 767px) {
+    #page-wrapper { padding: 12px; }
+    .page-header { font-size: 25px; }
+    .panel-body { padding: 14px; }
+    .btn { min-height: 42px; }
+    .form-control { min-height: 42px; font-size: 16px; }
+    .table-responsive { border: 0; }
+    .dataTables_wrapper { overflow-x: auto; }
+}

@@ -1,0 +1,27 @@
+# Local backups and runtime data
+/backups/
+**/data/
+*.sql
+*.sql.gz
+*.log
+*.jsonl
+
+# Build outputs
+**/bin/
+**/obj/
+**/publish/
+**/publish-single/
+.vs/
+*.user
+*.suo
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+**/connectionDB.php
+**/ilca-control-center.json
+*.pem
+*.key
+*.pfx
+*.p12

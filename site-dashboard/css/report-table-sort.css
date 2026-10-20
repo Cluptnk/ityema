@@ -1,0 +1,5 @@
+table[data-report-table] .report-sort-header { cursor:pointer; outline:none; user-select:none; }
+table[data-report-table] .report-sort-header:after { color:#9aabbd; content:' ↕'; font-size:11px; }
+table[data-report-table] .report-sort-header:hover,table[data-report-table] .report-sort-header:focus { background:#edf5fc; color:#174f80; }
+table[data-report-table] .report-sort-header.is-sort-asc:after { color:#2f5d8a; content:' ▲'; }
+table[data-report-table] .report-sort-header.is-sort-desc:after { color:#2f5d8a; content:' ▼'; }

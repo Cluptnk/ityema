@@ -1,0 +1,193 @@
+/*
+   Perdekor — sıfırdan tasarım katmanı.
+   Eski PHP/Bootstrap yapısını ve sol menünün hesaplanmış konumunu korur.
+*/
+:root {
+    --im-navy: #112b46;
+    --im-navy-deep: #0a1c2e;
+    --im-blue: #2b6df4;
+    --im-sky: #55a8ff;
+    --im-red: #e44747;
+    --im-green: #1fa971;
+    --im-amber: #e99a30;
+    --im-ink: #172b3a;
+    --im-muted: #6a7b8c;
+    --im-canvas: #eef3f8;
+    --im-line: #dce5ee;
+    --im-card: #ffffff;
+}
+
+html { background: var(--im-canvas); }
+body {
+    background: var(--im-canvas);
+    color: var(--im-ink);
+    font-family: "Segoe UI", Arial, sans-serif;
+    letter-spacing: .01em;
+}
+a { color: var(--im-blue); }
+a:hover, a:focus { color: #1655ca; }
+
+/* Üst çubuk */
+.navbar-inverse,
+.navbar-header,
+.top-nav,
+.navbar-inverse .navbar-collapse,
+.navbar-inverse .navbar-form,
+.bg-img {
+    background: var(--im-navy) !important;
+    background-image: none !important;
+    border-color: transparent !important;
+}
+.navbar-inverse {
+    border: 0;
+    box-shadow: 0 2px 16px rgba(8, 28, 48, .25);
+}
+.navbar-inverse .navbar-nav > li > a,
+.top-nav > li > a { color: #dce9f5 !important; }
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus,
+.top-nav > li > a:hover,
+.top-nav > li > a:focus,
+.top-nav > .open > a,
+.top-nav > .open > a:hover,
+.top-nav > .open > a:focus {
+    color: #fff !important;
+    background: rgba(255,255,255,.11) !important;
+}
+.top-nav > li > a { border-radius: 0; }
+.top-nav > .open > .dropdown-menu {
+    border: 0;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 10px 30px rgba(8, 28, 48, .22);
+}
+.navbar-toggle { border-color: rgba(255,255,255,.42); }
+.navbar-toggle .icon-bar { background: #fff !important; }
+.badge { background: var(--im-red); color: #fff; }
+#thisLOGOisawesome { filter: brightness(0) invert(1); opacity: .96; }
+.perdekor-brand {
+    display: flex !important;
+    align-items: center;
+    min-height: 50px;
+    color: #fff !important;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-decoration: none !important;
+}
+
+/* Sol menü: ölçüler bilinçli olarak değiştirilmez. */
+.side-nav,
+#customnav {
+    background: var(--im-navy-deep) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+.side-nav > li > a {
+    color: #c8d9e9 !important;
+    border-left: 3px solid transparent;
+    border-bottom-right-radius: 0 !important;
+    transition: background .16s ease, color .16s ease, border-color .16s ease;
+}
+.side-nav li a:hover,
+.side-nav li a:focus,
+.side-nav li a[style*="background-color"] {
+    color: #fff !important;
+    background: #173b5d !important;
+    border-left-color: var(--im-sky);
+    outline: 0;
+}
+.side-nav > li > ul { background: #0d2439; }
+.side-nav > li > ul > li > a { color: #aac0d6 !important; }
+.side-nav > li > ul > li > a:hover { color: #fff !important; background: #173b5d; }
+
+/* Sayfa yüzeyi */
+#page-wrapper { background: var(--im-canvas); }
+.page-header {
+    margin-top: 12px;
+    padding-bottom: 16px;
+    color: var(--im-ink);
+    border-bottom: 1px solid var(--im-line);
+    font-size: 30px;
+    font-weight: 650;
+}
+.page-header small { color: var(--im-muted); font-size: 48%; font-weight: 400; }
+.panel, .well, .modal-content {
+    border: 1px solid var(--im-line);
+    border-radius: 12px;
+    background: var(--im-card);
+    box-shadow: 0 7px 20px rgba(20, 44, 69, .07);
+    overflow: hidden;
+}
+.panel-heading,
+.panel-default > .panel-heading,
+.panel-primary > .panel-heading {
+    padding: 15px 18px;
+    color: var(--im-ink);
+    background: #fff;
+    border-bottom: 1px solid var(--im-line);
+    font-size: 15px;
+    font-weight: 650;
+}
+.panel-body { padding: 18px; }
+.panel-footer { background: #f7f9fb; border-top-color: var(--im-line); }
+
+/* Formlar, tablolar ve durumlar */
+.btn { border-radius: 7px; font-weight: 600; box-shadow: none; }
+.btn-primary, .btn-success { background: var(--im-blue); border-color: var(--im-blue); }
+.btn-primary:hover, .btn-primary:focus,
+.btn-success:hover, .btn-success:focus { background: #1758d4; border-color: #1758d4; }
+.btn-danger { background: var(--im-red); border-color: var(--im-red); }
+.btn-default { color: #405568; background: #f5f8fb; border-color: #d2dee9; }
+.form-control { height: 38px; border-color: #cad8e5; border-radius: 7px; box-shadow: none; }
+.form-control:focus { border-color: var(--im-sky); box-shadow: 0 0 0 3px rgba(85,168,255,.17); }
+.table { background: #fff; }
+.table > thead > tr > th {
+    padding: 13px 12px;
+    color: #607386;
+    background: #f6f8fb;
+    border-bottom: 1px solid var(--im-line);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+.table > tbody > tr > td { padding: 13px 12px; border-top-color: #e8eef4; }
+.table-hover > tbody > tr:hover { background: #f0f7ff; }
+
+/* Yeni operasyon kartları */
+.metric-panel { border: 0; border-radius: 12px; box-shadow: 0 10px 22px rgba(20, 44, 69, .13); }
+.metric-panel .metric { font-size: 36px; font-weight: 700; letter-spacing: -.04em; }
+.metric-panel .caption { font-weight: 600; }
+.metric-green { background: linear-gradient(135deg, #18a978, #087f65); }
+.metric-blue { background: linear-gradient(135deg, #397cf6, #2452c6); }
+.metric-orange { background: linear-gradient(135deg, #f1a537, #cc6c1b); }
+.metric-red { background: linear-gradient(135deg, #e85a5a, #bc303f); }
+.status, .status-badge { border-radius: 999px !important; padding: 6px 11px !important; font-size: 12px; letter-spacing: .02em; }
+.status-live, .status-running { background: var(--im-green) !important; }
+.status-offline { background: var(--im-red) !important; }
+.status-stopped, .status-unknown { background: #738397 !important; }
+
+/* Giriş sayfası */
+body.login-page { background: radial-gradient(circle at 20% 15%, #2c70b7 0, #112b46 38%, #081829 100%); }
+.login-page .card { border-radius: 16px; box-shadow: 0 24px 55px rgba(3, 15, 29, .34); }
+
+/* Eski temanın sayfanın soluna eklediği kırmızı şerit ve gölgesi kaldırılır. */
+@media (min-width: 600px) {
+    html { border-left: 0 !important; }
+    #sidebar { padding-left: 0 !important; margin-left: 0 !important; }
+    #sidebar:before { display: none !important; }
+    /* Eski -205px değer menüyü 20px sağa kaydırıp beyaz şerit bırakıyordu. */
+    #customnav { margin-left: -225px !important; }
+}
+
+@media (max-width: 767px) {
+    body { background: var(--im-canvas); }
+    #page-wrapper { padding: 12px; }
+    .page-header { margin-top: 6px; font-size: 26px; }
+    .panel-body { padding: 14px; }
+    .btn { min-height: 42px; }
+    .form-control { height: 42px; font-size: 16px; }
+    .navbar-ex1-collapse.collapse.in, div#sidebar.in { background: var(--im-navy-deep) !important; }
+    .table-responsive { border: 0; }
+    .dataTables_wrapper { overflow-x: auto; }
+}

@@ -1,0 +1,17 @@
+body.reports-hub-page { background: #eef3f9; }
+.reports-hub-wrapper { padding: 34px 28px 48px; min-height: calc(100vh - 60px); }
+.reports-hub-shell { max-width: 1160px; margin: 0 auto; }
+.reports-hub-heading { margin: 4px 0 28px; }
+.reports-hub-heading > span { color: #6a7b95; font-size: 12px; font-weight: 800; letter-spacing: .1em; }
+.reports-hub-heading h1 { color: #1f385d; font-size: 30px; font-weight: 800; margin: 5px 0 7px; }
+.reports-hub-heading p { color: #657792; font-size: 15px; margin: 0; }
+.report-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 360px)); gap: 20px; }
+.report-launch-card { align-items: center; background: #fff; border: 1px solid #dce5f0; border-radius: 16px; box-shadow: 0 10px 25px rgba(31, 56, 93, .08); color: #183256; display: flex; gap: 16px; min-height: 144px; overflow: hidden; padding: 24px; position: relative; text-decoration: none; transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease; }
+.report-launch-card:before { background: linear-gradient(180deg, #3d78b8, #244f84); content: ''; height: 100%; left: 0; position: absolute; top: 0; width: 6px; }
+.report-launch-card:hover, .report-launch-card:focus { border-color: #8aafd8; box-shadow: 0 15px 31px rgba(31, 56, 93, .16); color: #183256; outline: none; text-decoration: none; transform: translateY(-3px); }
+.report-launch-icon { align-items: center; background: #eaf2fb; border-radius: 13px; color: #2e639d; display: flex; flex: 0 0 52px; font-size: 23px; height: 52px; justify-content: center; }
+.report-launch-content { display: flex; flex: 1; flex-direction: column; gap: 7px; min-width: 0; }
+.report-launch-content strong { font-size: 19px; font-weight: 800; }
+.report-launch-content small { color: #667793; font-size: 13px; line-height: 1.45; }
+.report-launch-arrow { color: #2e639d; font-size: 17px; }
+@media (max-width: 767px) { .reports-hub-wrapper { padding: 22px 16px 36px; } .reports-hub-heading h1 { font-size: 26px; } .report-card-grid { grid-template-columns: 1fr; } }

@@ -1,0 +1,109 @@
+/* Isolated design for modern_harita.php.  It deliberately does not change the legacy map. */
+.modern-map-page { background: #eef3f8; }
+.modern-map-wrapper { min-height: 100vh; padding: 53px 5px 0; background: #eef3f8; }
+.modern-map-shell { max-width: 100%; margin: 0 auto; color: #17253a; }
+.modern-map-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 16px; background: #fff; border: 1px solid #dce5ef; border-radius: 10px 10px 0 0; }
+.modern-map-eyebrow { color: #74849a; display: block; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
+.modern-map-heading h1 { margin: 3px 0 0; color: #162a43; font-size: 23px; font-weight: 800; }
+.modern-map-actions { align-items: center; display: flex; gap: 9px; }
+.modern-view-select, .modern-icon-button { border: 1px solid #cbd8e6; border-radius: 8px; background: #fff; color: #263b54; height: 38px; padding: 0 11px; font-weight: 700; }
+.modern-icon-button { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
+.modern-icon-button:hover { background: #edf5fc; }
+.modern-map-filterbar { display: flex; flex: 1 1 auto; flex-wrap: wrap; gap: 8px; align-items: center; min-width: 0; padding: 0; background: transparent; border: 0; }
+.modern-filter { border: 1px solid #d7e1ec; border-radius: 999px; background: #fff; color: #53677e; cursor: pointer; font-size: 12px; font-weight: 700; padding: 7px 10px; transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
+.modern-filter[data-filter="all"] { background: #eef2fa; border-color: #cbd6ed; color: #31466f; }
+.modern-filter[data-filter="running"] { background: #edf8f0; border-color: #bfe4c7; color: #2d7b46; }
+.modern-filter[data-filter="manual"] { background: #fff7df; border-color: #eedaa0; color: #9a731d; }
+.modern-filter[data-filter="cone"] { background: #f4effb; border-color: #d8c8ec; color: #77529b; }
+.modern-filter[data-filter="weft"] { background: #fff1ec; border-color: #efcabe; color: #a95b45; }
+.modern-filter[data-filter="warp"] { background: #eef3ff; border-color: #cbd8f3; color: #4968a9; }
+.modern-filter[data-filter="offline"] { background: #fdebed; border-color: #de8e96; color: #8f2632; }
+.modern-filter[data-filter="all"].is-active { background: #31466f; border-color: #31466f; color: #fff; }
+.modern-filter[data-filter="running"].is-active { background: #2f855a; border-color: #2f855a; color: #fff; }
+.modern-filter[data-filter="manual"].is-active { background: #b98b25; border-color: #b98b25; color: #fff; }
+.modern-filter[data-filter="cone"].is-active { background: #7d5aa4; border-color: #7d5aa4; color: #fff; }
+.modern-filter[data-filter="weft"].is-active { background: #bb684e; border-color: #bb684e; color: #fff; }
+.modern-filter[data-filter="warp"].is-active { background: #536faf; border-color: #536faf; color: #fff; }
+.modern-filter[data-filter="offline"].is-active { background: #a92e3a; border-color: #a92e3a; color: #fff; }
+.modern-map-viewport { position: relative; height: calc(100vh - 96px); min-height: 760px; overflow: hidden; border: 0; background: #e8eef4; cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none; }
+.modern-map-viewport.is-dragging { cursor: grabbing; }
+.modern-map-viewport:fullscreen { width: 100vw; height: 100vh; min-height: 100vh; border: 0; background: #e8eef4; }
+.modern-map-viewport:-webkit-full-screen { width: 100vw; height: 100vh; min-height: 100vh; border: 0; background: #e8eef4; }
+.modern-map-viewport:fullscreen .modern-map-canvas, .modern-map-viewport:-webkit-full-screen .modern-map-canvas { min-width: 5000px; min-height: 3600px; }
+.modern-map-canvas { position: absolute; width: 5000px; height: 3600px; min-width: 5000px; min-height: 3600px; transform-origin: 0 0; background-color: #e7edf3; background-repeat: no-repeat; background-position: 0 0; box-shadow: none; }
+.modern-map-canvas.has-background { background-size: auto; }
+.modern-map-empty { position: sticky; left: 50%; top: 48%; transform: translate(-50%, -50%); width: max-content; max-width: 85vw; padding: 13px 17px; border-radius: 9px; background: rgba(255,255,255,.94); color: #62748a; box-shadow: 0 5px 20px rgba(22,42,67,.15); font-weight: 700; }
+.modern-loom-card { position: absolute; width: 230px; min-height: 142px; overflow: hidden; border: 4px solid #4ee52c; border-radius: 9px; background: #fff !important; box-shadow: 0 4px 12px rgba(23, 40, 60, .20); color: #132235; font-family: Arial, sans-serif; -webkit-user-select: none; user-select: none; }
+.modern-loom-card.loom-state-running { border-color: #5bdf41; }
+.modern-loom-card.loom-state-manual { border-color: #d3a238; }
+.modern-loom-card.loom-state-cone { border-color: #8960ad; }
+.modern-loom-card.loom-state-weft { border-color: #c87358; }
+.modern-loom-card.loom-state-warp { border-color: #3a65c4; }
+.modern-loom-card.loom-state-stopped { border-color: #da9a37; }
+.modern-loom-card.loom-state-offline { border-color: #ba3440; background: #fff4f5 !important; opacity: 1; }
+.modern-card-title { display: flex; align-items: center; justify-content: space-between; gap: 5px; min-height: 28px; padding: 4px 7px; background: #354250; color: #fff; font-size: 12px; font-weight: 800; line-height: 1.1; }
+.modern-card-title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.modern-card-state { flex: 0 0 auto; font-size: 14px; }
+.loom-state-running .modern-card-state { color: #67eb4f; }
+.loom-state-manual .modern-card-state { color: #ffe29a; }
+.loom-state-cone .modern-card-state { color: #ddc5f4; }
+.loom-state-weft .modern-card-state { color: #ffc1ab; }
+.loom-state-warp .modern-card-state { color: #8ea6ff; }
+.loom-state-offline .modern-card-state { color: #ffe2e5; }
+.modern-card-metrics { display: grid; gap: 3px; padding: 5px 6px; background: #fff; }
+.modern-card-row { display: grid; grid-template-columns: 70px minmax(0, 1fr) 32px; align-items: center; min-height: 18px; overflow: hidden; border: 1px solid #dbe4ed; border-radius: 4px; background: #f8fafc; font-size: 10px; line-height: 1.1; }
+.modern-card-row.is-wide { grid-template-columns: 70px minmax(0, 1fr); }
+.modern-card-key { align-self: stretch; display: flex; align-items: center; justify-content: center; overflow: hidden; border-right: 1px solid #dbe4ed; background: #e8edf2; color: #344454; font-weight: 800; text-align: center; text-overflow: ellipsis; white-space: nowrap; padding: 2px 3px; }
+.modern-card-value, .modern-card-unit { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; padding: 0 4px; }
+.modern-card-value { color: #142237; font-size: 11px; font-weight: 700; }
+.modern-card-unit { color: #718195; padding-left: 0; }
+.modern-card-row.is-wide .modern-card-value { overflow: visible; text-overflow: clip; }
+.modern-card-daily { display: grid; gap: 3px; padding: 0 6px 6px; color: #63768a; background: #fff; font-size: 10px; line-height: 1.15; }
+.modern-card-daily-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; min-height: 19px; overflow: hidden; border: 1px solid #dbe4ed; border-radius: 4px; background: #f5f8fb; }
+.modern-card-daily-row span { padding: 2px 5px; }
+.modern-card-daily-row b { align-self: stretch; display: flex; align-items: center; padding: 2px 6px; border-left: 1px solid #dbe4ed; color: #1b2d43; background: #edf3f8; font-size: 11px; }
+.loom-state-running .modern-card-title { background: #39784a; }
+.loom-state-manual .modern-card-title { background: #9b7725; }
+.loom-state-cone .modern-card-title { background: #6f4d8e; }
+.loom-state-weft .modern-card-title { background: #a65e49; }
+.loom-state-warp .modern-card-title { background: #405eac; }
+.loom-state-stopped .modern-card-title { background: #a86f2d; }
+.loom-state-offline .modern-card-title { background: #a52b37; }
+.loom-state-running .modern-card-key, .loom-state-running .modern-card-daily-row b { background: #edf8ea; border-color: #c7e7bf; }
+.loom-state-manual .modern-card-key, .loom-state-manual .modern-card-daily-row b { background: #fff7df; border-color: #efdfa9; }
+.loom-state-cone .modern-card-key, .loom-state-cone .modern-card-daily-row b { background: #f4effb; border-color: #d9caec; }
+.loom-state-weft .modern-card-key, .loom-state-weft .modern-card-daily-row b { background: #fff1ec; border-color: #efcabe; }
+.loom-state-warp .modern-card-key, .loom-state-warp .modern-card-daily-row b { background: #eef3ff; border-color: #cbd8f3; }
+.loom-state-stopped .modern-card-key, .loom-state-stopped .modern-card-daily-row b { background: #fff4e7; border-color: #f0d4af; }
+.loom-state-offline .modern-card-metrics, .loom-state-offline .modern-card-daily { background: #fff7f7; }
+.loom-state-offline .modern-card-row, .loom-state-offline .modern-card-daily-row { border-color: #e6adb3; background: #fffafb; }
+.loom-state-offline .modern-card-key, .loom-state-offline .modern-card-daily-row b { background: #f8dfe2; border-color: #e6adb3; color: #7e2330; }
+.modern-card-daily span:nth-child(even) { text-align: right; }
+.modern-loom-card.is-filtered, .modern-loom-card.is-searched { display: none; }
+.modern-map-help { margin: 5px 4px; color: #718399; font-size: 11px; }
+
+@media (max-width: 767px) {
+  .modern-map-wrapper { padding: 51px 0 10px; }
+  .modern-map-toolbar { align-items: flex-start; flex-direction: column-reverse; border-radius: 0; padding: 10px 12px; }
+  .modern-map-actions { align-items: center; display: grid; flex-wrap: wrap; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: 100%; }
+  .modern-view-select, .modern-icon-button { max-width: none; min-width: 0; width: 100%; }
+  /* Telefonda koordinatlı harita yok; kart listesi için bu masaüstü
+     kontrollerini göstermemek hem yanlış tam ekranı hem de kaydırma çakışmasını önler. */
+  #modern-map-reset, #modern-fullscreen { display: none; }
+  .modern-map-filterbar { gap: 6px; }
+  .modern-filter { font-size: 11px; padding: 6px 8px; }
+  .modern-map-viewport { height: auto; min-height: 280px; overflow: visible; border-left: 0; border-right: 0; cursor: default; touch-action: pan-y; }
+  .modern-map-canvas { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 11px; width: 100%; min-width: 0; height: auto !important; min-height: 280px; padding: 10px 12px 16px; transform: none !important; background-image: none !important; }
+  .modern-loom-card { min-height: 166px; position: relative; left: auto !important; top: auto !important; width: 100%; min-width: 0; }
+  .modern-card-title { font-size: 15px; min-height: 34px; padding: 6px 9px; }
+  .modern-card-state { font-size: 18px; }
+  .modern-card-metrics { gap: 5px; padding: 8px; }
+  .modern-card-row { font-size: 12px; grid-template-columns: 94px minmax(0, 1fr) 45px; min-height: 25px; }
+  .modern-card-row.is-wide { grid-template-columns: 94px minmax(0, 1fr); }
+  .modern-card-value { font-size: 13px; }
+  .modern-card-daily { gap: 5px; padding: 0 8px 8px; font-size: 12px; }
+  .modern-card-daily-row { min-height: 26px; }
+  .modern-card-daily-row b { font-size: 13px; }
+  .modern-map-empty { position: absolute; }
+  .modern-map-help { margin: 10px 12px; }
+}
