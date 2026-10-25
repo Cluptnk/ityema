@@ -21,7 +21,8 @@ internal sealed class MainForm : Form
     public MainForm()
     {
         _settings = SettingsStore.Load();
-        Text = "ITEMA ILCA Kontrol Merkezi";
+        _timer = new System.Windows.Forms.Timer();
+        Text = "ITEMA ILCA Kontrol Merkezi — 2026.10.22 / 3";
         StartPosition = FormStartPosition.CenterScreen;
         MinimumSize = new Size(900, 650);
         Size = new Size(1100, 760);
@@ -30,7 +31,7 @@ internal sealed class MainForm : Form
         {
             Dock = DockStyle.Top,
             Height = 42,
-            Text = "TEZGÂH KOMUTLARI KAPALI: Program yalnızca veri okur. İsterseniz aşağıdan sadece ilmsdb_dev veritabanına kayıt açabilirsiniz.",
+            Text = "Otomatik tezgâh komutu gönderilmez. Ayar ve dosya işlemleri yalnız Manuel işlemler ekranından, sizin gönderiminizle yapılır.",
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.FromArgb(255, 243, 205),
             ForeColor = Color.FromArgb(102, 77, 3),
@@ -52,6 +53,8 @@ internal sealed class MainForm : Form
         _loomGrid.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = nameof(LoomSettings.EventCount), HeaderText = "Olay sayısı", FillWeight = 50 });
         _loomGrid.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = nameof(LoomSettings.Protocol), HeaderText = "Protokol", FillWeight = 45 });
 
+        _loomGrid.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = nameof(LoomSettings.ClockStatus), HeaderText = "Tezgâh saati", ReadOnly = true, FillWeight = 130 });
+
         _pollInterval = new NumericUpDown { Minimum = 1, Maximum = 3600, Value = Math.Clamp(_settings.PollIntervalSeconds, 1, 3600), Width = 70 };
         _oneCycleButton = new Button { Text = "Bir kez oku", AutoSize = true };
         _continuousButton = new Button { Text = "Sürekli başlat", AutoSize = true };
@@ -67,8 +70,18 @@ internal sealed class MainForm : Form
         _oneCycleButton.Click += async (_, _) => await PollAllAsync();
         _continuousButton.Click += (_, _) => ToggleContinuousPolling();
 
-        var commandBar = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 48, Padding = new Padding(10), AutoSize = false };
-        commandBar.Controls.AddRange([addButton, removeButton, saveButton, loadDatabaseLoomsButton, new Label { Text = "  Tekrar (sn):", AutoSize = true, TextAlign = ContentAlignment.MiddleCenter, Padding = new Padding(8, 6, 0, 0) }, _pollInterval, _oneCycleButton, _continuousButton]);
+        var manualButton = new Button { Text = "Manuel işlemler…", AutoSize = true };
+        manualButton.Click += (_, _) =>
+        {
+            if (_pollInProgress) { MessageBox.Show(this, "Bir okuma turu sürüyor. Tur bitince tekrar açın.", "Veri okunuyor"); return; }
+            var resume = _timer.Enabled;
+            _timer.Stop();
+            try { _loomGrid.EndEdit(); using var dialog = new ManualOperationsForm(_settings.Looms, AppendLog); dialog.ShowDialog(this); }
+            finally { if (resume) _timer.Start(); }
+        };
+
+        var commandBar = new FlowLayoutPanel { Dock = DockStyle.Top, Padding = new Padding(10), AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink };
+        commandBar.Controls.AddRange([addButton, removeButton, saveButton, loadDatabaseLoomsButton, new Label { Text = "  Tekrar (sn):", AutoSize = true, TextAlign = ContentAlignment.MiddleCenter, Padding = new Padding(8, 6, 0, 0) }, _pollInterval, _oneCycleButton, _continuousButton, manualButton]);
 
         var configuredConnection = _settings.DevelopmentConnectionString;
         if (string.IsNullOrWhiteSpace(configuredConnection))
@@ -79,7 +92,7 @@ internal sealed class MainForm : Form
         _developmentWriteEnabled = new CheckBox { Text = "Geliştirme veritabanına yaz", Checked = _settings.DevelopmentDatabaseWriteEnabled, AutoSize = true };
         var reloadDevelopmentConfigButton = new Button { Text = "Dev. ayarını siteden al", AutoSize = true };
         reloadDevelopmentConfigButton.Click += (_, _) => LoadDevelopmentConnectionFromSite();
-        var databasePanel = new TableLayoutPanel { Dock = DockStyle.Top, Height = 55, Padding = new Padding(10, 5, 10, 5), ColumnCount = 2, RowCount = 2 };
+        var databasePanel = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Padding = new Padding(10, 5, 10, 5), ColumnCount = 2, RowCount = 2 };
         databasePanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         databasePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         databasePanel.Controls.Add(new Label { Text = "Dev. bağlantısı:", AutoSize = true, Padding = new Padding(0, 5, 8, 0) }, 0, 0);
@@ -98,7 +111,6 @@ internal sealed class MainForm : Form
         Controls.Add(commandBar);
         Controls.Add(safeMode);
 
-        _timer = new System.Windows.Forms.Timer();
         _timer.Tick += async (_, _) => await PollAllAsync();
         FormClosing += (_, _) => _shutdown.Cancel();
         AppendLog("Hazır. İlk test için tek bir tezgâh ekleyip ‘Bir kez oku’ düğmesine basın.");
@@ -127,6 +139,13 @@ internal sealed class MainForm : Form
             IlcaDatabase? database = _developmentWriteEnabled.Checked ? new IlcaDatabase(_developmentConnectionString.Text) : null;
             foreach (var result in results)
             {
+                var loom = _settings.Looms.FirstOrDefault(item => item.LoomId == result.LoomId);
+                if (loom is not null)
+                {
+                    loom.ClockStatus = result.Succeeded && result.Reading is not null && result.Events?.Count > 0
+                        ? LoomClock.Describe(result.Events[0].Timestamp, result.Events[0].EventSeconds, result.Reading.Timestamp)
+                        : "Veri alınamadı";
+                }
                 if (_settings.DiagnosticCaptureEnabled)
                 {
                     Directory.CreateDirectory(outputDirectory);
@@ -165,11 +184,15 @@ internal sealed class MainForm : Form
                 }
             }
 
+            _settings.Looms.ResetBindings();
+
             if (database is not null && DateTime.Now >= _nextStopSummaryRefresh)
             {
                 try
                 {
-                    await database.RefreshShiftSummariesAsync(_shutdown.Token);
+                    // Summary reconstruction has CPU work between database awaits.
+                    // Keep it off the WinForms message loop so the window stays responsive.
+                    await Task.Run(() => database.RefreshShiftSummariesAsync(_shutdown.Token), _shutdown.Token);
                     _nextStopSummaryRefresh = DateTime.Now.AddMinutes(3);
                     AppendLog("Vardiya ve 24 saat duruş özetleri güncellendi. Kartlar, Tezgâh Veri Takibi ve raporlar hızlı özet verisini kullanacak.");
                 }
@@ -183,6 +206,10 @@ internal sealed class MainForm : Form
         catch (OperationCanceledException)
         {
             AppendLog("Toplayıcı durduruldu.");
+        }
+        catch (Exception exception)
+        {
+            AppendLog($"Okuma turu tamamlanamadı — {exception.Message}");
         }
         finally
         {
@@ -262,6 +289,16 @@ internal sealed class MainForm : Form
 
     private void AppendLog(string message)
     {
+        // This window stays open continuously; bound the native text buffer.
+        if (_log.TextLength > 200_000)
+        {
+            var cut = _log.Text.IndexOf('\n', _log.TextLength - 100_000);
+            if (cut >= 0)
+            {
+                _log.Select(0, cut + 1);
+                _log.SelectedText = string.Empty;
+            }
+        }
         _log.AppendText($"{DateTime.Now:HH:mm:ss}  {message}{Environment.NewLine}");
     }
 }

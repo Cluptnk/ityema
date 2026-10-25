@@ -49,7 +49,7 @@ $looms = $db->exec(
      FROM telaio AS t
      LEFT JOIN dato_rt AS r ON r.IdTelaio = t.IdTelaio
      LEFT JOIN loom_stop_window_summary AS s ON s.LoomId = t.IdTelaio AND s.SummaryDate = ? AND s.WindowCode = ?
-     WHERE t.EnableTelaio = 1 ORDER BY t.IdTelaio",
+     WHERE t.EnableTelaio = 1 AND t.IdTelaio<>100 ORDER BY t.IdTelaio",
     array(1 => $today->format('Y-m-d'), 2 => $windowCode)
 );
 $live = 0; $offline = 0;

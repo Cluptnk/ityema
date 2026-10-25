@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
-<?php include('head.php'); ?>
+<?php include('head.php'); require_once __DIR__.'/report_engine.php'; ?>
 <?php
 $today = date('Y-m-d');
 $hour = (int) date('G');
+if ($hour < 7) $today = date('Y-m-d', strtotime('-1 day'));
 $defaultWindow = $hour >= 7 && $hour < 15 ? 's1' : ($hour >= 15 && $hour < 23 ? 's2' : 's3');
 ?>
 <body class="reports-page performance-page">
@@ -18,15 +19,15 @@ $defaultWindow = $hour >= 7 && $hour < 15 ? 's1' : ($hour >= 15 && $hour < 23 ? 
             <button id="performance-run" type="button"><i class="fa fa-line-chart"></i> Performansı getir</button>
         </section>
         <section class="report-summary performance-summary" aria-live="polite">
-            <article><span>Üretim uzunluğu</span><strong id="performance-length">—</strong></article>
-            <article><span>Ortalama hız</span><strong id="performance-speed">—</strong></article>
-            <article><span>Randıman</span><strong id="performance-efficiency">—</strong></article>
+            <article><span>Kayıtlı üretim uzunluğu</span><strong id="performance-length">—</strong></article>
+            <article><span>Kayıtlı ortalama hız</span><strong id="performance-speed">—</strong></article>
+            <article><span>Kayıtlı sürede randıman</span><strong id="performance-efficiency">—</strong></article>
             <article><span>Duruş süresi</span><strong id="performance-stop-duration">—</strong></article>
         </section>
-        <section class="report-table-panel performance-table"><header><h2>Tezgâh bazında performans <small id="performance-period"></small></h2></header><div class="report-table-scroll"><table data-report-table><thead><tr><th>ID</th><th>Tezgâh</th><th>Üretim</th><th>Ortalama hız</th><th>Randıman</th><th>Duruş</th><th>Duruş süresi</th><th>Atkı</th></tr></thead><tbody id="performance-results"></tbody></table></div></section>
-        <p class="performance-note"><i class="fa fa-info-circle"></i> Hız ve randıman, seçilen dönem içindeki olay kayıtlarından hesaplanır; duruş adedi ve süresi vardiya özetinden alınır.</p>
+        <section class="report-table-panel performance-table"><header><h2>Tezgâh bazında performans <small id="performance-period"></small></h2></header><div class="report-table-scroll"><table data-report-table><thead><tr><th>ID</th><th>Tezgâh</th><th>Üretim</th><th>Kayıtlı ortalama hız</th><th>Kayıtlı sürede randıman</th><th>Duruş</th><th>Duruş süresi</th><th>Atkı</th></tr></thead><tbody id="performance-results"></tbody></table></div></section>
+        <p class="performance-note"><i class="fa fa-info-circle"></i> Üretim, hız, randıman ve duruşlar aynı olay kayıtlarından hesaplanır. Dönem sınırını aşan kayıtlarda süre, atkı ve üretim dönemle örtüşen süreye oranlanır. Henüz kayda geçmeyen üretim dahil değildir.</p>
     </main></div>
 </div>
 <?php include('footer.php'); ?>
-<link rel="stylesheet" href="css/reports.css?v=20260922-5"><link rel="stylesheet" href="css/performance.css?v=20260922-1"><link rel="stylesheet" href="css/report-table-sort.css?v=20260923-1"><script src="js/performance.js?v=20260922-1"></script><script src="js/report-table-sort.js?v=20260923-2"></script>
+<link rel="stylesheet" href="css/reports.css?v=20260922-5"><link rel="stylesheet" href="css/performance.css?v=20260922-1"><link rel="stylesheet" href="css/report-table-sort.css?v=20260923-1"><script src="js/report-quality.js?v=20261022-6"></script><script src="js/performance.js?v=20261022-6"></script><script src="js/report-table-sort.js?v=20260923-2"></script>
 </body></html>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-<?php include('head.php'); ?>
+<?php include('head.php'); require_once __DIR__.'/report_engine.php'; ?>
 <?php
-$looms = $db->exec("SELECT IdTelaio, NomeTelaio FROM telaio WHERE EnableTelaio = 1 ORDER BY IdTelaio");
+$looms = $db->exec("SELECT IdTelaio, NomeTelaio FROM telaio WHERE EnableTelaio = 1 AND IdTelaio<>100 ORDER BY IdTelaio");
 $today = date('Y-m-d');
 ?>
 <body class="meterage-page">
@@ -22,8 +22,8 @@ $today = date('Y-m-d');
                     <button id="meterage-run" type="button"><i class="fa fa-bar-chart"></i> Metrajı getir</button>
                 </section>
                 <section class="meterage-kpis" aria-live="polite">
-                    <article><span>Toplam metraj</span><strong id="meterage-total">—</strong></article>
-                    <article><span>Günlük ortalama</span><strong id="meterage-average">—</strong></article>
+                    <article><span>Kayıtlı metraj</span><strong id="meterage-total">—</strong></article>
+                    <article><span>Kayıtlı günlük ortalama</span><strong id="meterage-average">—</strong></article>
                     <article><span>Üretim görülen tezgâh</span><strong id="meterage-looms">—</strong></article>
                     <article><span>Rapor günü</span><strong id="meterage-days">—</strong></article>
                 </section>
@@ -35,14 +35,14 @@ $today = date('Y-m-d');
                     <header><h2>Günlük metraj grafiği</h2><small>Her çubuk bir günün toplam dokuma metresini gösterir.</small></header>
                     <div id="meterage-chart" class="meterage-chart"></div>
                 </section>
-                <p class="meterage-note"><i class="fa fa-info-circle"></i> Metraj, makinenin <em>LunghezzaDaInizio</em> üretim sayacındaki günlük farktan metreye çevrilerek hesaplanır.</p>
+                <p class="meterage-note"><i class="fa fa-info-circle"></i> Metraj, olay sayaçlarından parça değişimleri dikkate alınarak hesaplanır. Eksik sayaç aralıkları toplama eklenmez; gösterilen değer kayıtlı üretimdir.</p>
             </main>
         </div>
     </div>
     <?php include('footer.php'); ?>
     <link rel="stylesheet" href="css/meterage-report.css?v=20260923-1">
     <link rel="stylesheet" href="css/report-table-sort.css?v=20260923-1">
-    <script src="js/meterage-report.js?v=20260923-1"></script>
+    <script src="js/report-quality.js?v=20261022-6"></script><script src="js/meterage-report.js?v=20261022-6"></script>
     <script src="js/report-table-sort.js?v=20260923-2"></script>
 </body>
 </html>

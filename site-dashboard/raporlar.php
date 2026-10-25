@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<?php include('head.php'); ?>
+<?php include('head.php'); require_once __DIR__.'/report_engine.php'; ?>
 <body class="reports-hub-page">
     <div id="wrapper">
         <nav id="nave" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -13,6 +13,7 @@
                     <span>ÜRETİM RAPORLARI</span>
                     <h1>Raporlar</h1>
                     <p>İhtiyacınız olan raporu seçerek ayrıntılı analiz ekranına geçin.</p>
+                    <p role="status">Doğrulanamayan değerler sıfır olarak gösterilmez. Veri kaynağı ve eksikler her raporda belirtilir. Tezgâh kayıtları, operatör atama kaydı olmadan bir çalışanın sorumluluğunu veya performansını belirlemez.</p>
                 </header>
                 <section class="report-card-grid" aria-label="Rapor listesi">
                     <a class="report-launch-card" href="durus_analizi.php">
@@ -51,7 +52,7 @@
                         <span class="report-launch-icon"><i class="fa fa-clock-o"></i></span>
                         <span class="report-launch-content">
                             <strong>Saatlik Üretim</strong>
-                            <small>Seçilen gün için saat saat dokunan metraj, en verimli saat ve üretim grafiği</small>
+                            <small>Seçilen gün için saat saat dokunan metraj, en yüksek üretim saati ve üretim grafiği</small>
                         </span>
                         <span class="report-launch-arrow"><i class="fa fa-arrow-right"></i></span>
                     </a>
@@ -70,7 +71,7 @@
                         <span class="report-launch-icon"><i class="fa fa-shield"></i></span>
                         <span class="report-launch-content">
                             <strong>Veri Güvenliği</strong>
-                            <small>Günlük veritabanı ve site yedeğinin son durumunu takip edin</small>
+                            <small>Son yedek kaydını, dosyaları ve güncelliği birlikte kontrol edin</small>
                         </span>
                         <span class="report-launch-arrow"><i class="fa fa-arrow-right"></i></span>
                     </a>

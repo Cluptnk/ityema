@@ -1,5 +1,5 @@
 (function () {
-  'use strict';
+  'use strict'; var requestNumber=0;
   var colors = ['#3f7cac', '#be754e', '#8d61a9', '#3e996f', '#c15f66', '#c79b37', '#5670b7', '#778594'];
   var from = document.getElementById('report-from');
   var to = document.getElementById('report-to');
@@ -20,7 +20,7 @@
   // çıkarmaktır. Kullanıcı düğmeye basarsa yalnız o ID'leri gösterir.
   var loomFilterMode = 'exclude';
 
-  function duration(seconds) {
+  function duration(seconds) { if(seconds==null)return '—';
     seconds = Number(seconds || 0);
     var hours = Math.floor(seconds / 3600);
     var minutes = Math.floor((seconds % 3600) / 60);
@@ -73,7 +73,7 @@
   function drawPie(causes) {
     var pie = document.getElementById('report-pie');
     var legend = document.getElementById('report-legend');
-    var total = causes.reduce(function (sum, cause) { return sum + Number(cause.seconds || 0); }, 0);
+    var total = causes.reduce(function (sum, cause) { return sum + Number(cause.seconds || 0); }, 0); var useSeconds=total>0;
     if (!total) total = causes.reduce(function (sum, cause) { return sum + Number(cause.count || 0); }, 0);
     if (!total) {
       pie.style.background = '#eef2f6';
@@ -83,7 +83,7 @@
     }
     var progress = 0;
     var parts = causes.map(function (cause, index) {
-      var value = Number(cause.seconds || 0) || Number(cause.count || 0);
+      var value = useSeconds ? Number(cause.seconds || 0) : Number(cause.count || 0);
       var next = progress + value / total * 100;
       var color = colors[index % colors.length];
       var part = color + ' ' + progress.toFixed(2) + '% ' + next.toFixed(2) + '%';
@@ -102,9 +102,9 @@
     causeRanking = data.causeRanking || causeRanking;
     renderLoomOptions();
     lastData = data;
-    excelButton.disabled = false;
-    pdfButton.disabled = false;
-    document.getElementById('report-total-count').textContent = Number(data.summary.count || 0) + ' kayıt';
+    excelButton.disabled = data.summary.count==null;
+    pdfButton.disabled = data.summary.count==null;
+    document.getElementById('report-total-count').textContent = (data.summary.count==null?'—':Number(data.summary.count)+' kayıt');
     document.getElementById('report-total-duration').textContent = duration(data.summary.seconds);
     document.getElementById('report-cause-count').textContent = Number(data.summary.causeCount || 0);
     rows('report-causes', causeRanking.map(function (item) {
@@ -117,16 +117,16 @@
     drawPie(data.causes || []);
   }
 
-  function loadReport() {
+  function loadReport() { var requestId=++requestNumber; ReportQuality.loading();
     button.disabled = true; button.textContent = 'Yükleniyor…';
     excelButton.disabled = true;
     pdfButton.disabled = true;
     var query = new URLSearchParams({ from: from.value, to: to.value, window: windowSelect.value, loom: loom.value, looms: searchedLoomIds().join(','), loomMode: loomFilterMode, cause: selectedCauseCode });
-    fetch('reports_data.php?' + query.toString(), { credentials: 'same-origin' })
+    ReportQuality.request('reports_data.php?' + query.toString(), { credentials: 'same-origin' })
       .then(function (response) { if (!response.ok) throw new Error('Rapor verisi alınamadı.'); return response.json(); })
-      .then(render)
-      .catch(function (error) { lastData = null; rows('report-causes', '<tr><td class="report-empty" colspan="3">' + escapeHtml(error.message) + '</td></tr>', 3); rows('report-details', '', 4); })
-      .finally(function () { button.disabled = false; button.innerHTML = '<i class="fa fa-bar-chart"></i> Raporu getir'; });
+      .then(function(data){if(requestId!==requestNumber)return;ReportQuality.show(data.quality);render(data);})
+      .catch(function (error) { if(typeof requestId!=='undefined'&&requestId!==requestNumber)return;ReportQuality.error(); lastData = null; rows('report-causes', '<tr><td class="report-empty" colspan="3">' + escapeHtml(error.message) + '</td></tr>', 3); rows('report-details', '', 4); })
+      .finally(function () { if(requestId!==requestNumber)return; button.disabled = false; button.innerHTML = '<i class="fa fa-bar-chart"></i> Raporu getir'; });
   }
 
   function selectedLoomLabel() {
@@ -157,7 +157,7 @@
     var details = (lastData.details || []).map(function (item) { return [item.loomId + ' ' + item.loomName, item.cause, Number(item.count || 0), duration(item.seconds)]; });
     var documentHtml = '<!doctype html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8">' +
       '<style>body{font-family:Arial,sans-serif;color:#20344b;padding:24px}h1{margin:0;color:#19304c;font-size:24px}h2{margin:25px 0 8px;color:#2f5d8a;font-size:16px}p{color:#667b91}table{border-collapse:collapse;width:100%;margin-bottom:18px}th{background:#2f5d8a;color:#fff;text-align:left;padding:9px;border:1px solid #244d75}td{padding:8px;border:1px solid #d8e2ec}tr:nth-child(even) td{background:#f4f8fb}.summary{width:480px}.summary td:first-child{font-weight:bold;background:#edf3f8;width:220px}</style></head><body>' +
-      '<h1>DURUŞ RAPORU</h1><p>Tarih aralığı: <b>' + escapeHtml(lastData.from + ' - ' + lastData.to) + '</b></p>' +
+      '<h1>KAYITLI DURUŞ RAPORU</h1><p>Kapsam: yalnız alınmış olay kayıtları; cihaz saatine göre dönem. 100 PiCANOL hariçtir.</p><p>'+escapeHtml((lastData.quality&&lastData.quality.messages||[]).join(' '))+'</p><p>Tarih aralığı: <b>' + escapeHtml(lastData.from + ' - ' + lastData.to) + '</b></p>' +
       '<table class="summary"><tbody><tr><td>Vardiya / dönem</td><td>' + escapeHtml(lastData.windowLabel || '') + '</td></tr><tr><td>Tezgâh seçimi</td><td>' + escapeHtml(selectedLoomLabel()) + '</td></tr><tr><td>Duruş nedeni</td><td>' + escapeHtml(selectedCauseLabel()) + '</td></tr><tr><td>Toplam duruş kaydı</td><td>' + Number(lastData.summary.count || 0) + '</td></tr><tr><td>Toplam duruş süresi</td><td>' + duration(lastData.summary.seconds) + '</td></tr><tr><td>Farklı duruş nedeni</td><td>' + Number(lastData.summary.causeCount || 0) + '</td></tr></tbody></table>' +
       table('Nedene göre özet', ['Duruş nedeni', 'Adet', 'Toplam süre'], causes) +
       table('Tezgâh ve neden detayı', ['Tezgâh', 'Duruş nedeni', 'Adet', 'Toplam süre'], details) + '</body></html>';

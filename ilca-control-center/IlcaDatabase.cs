@@ -150,6 +150,7 @@ internal sealed class IlcaDatabase
                 var active = new Dictionary<int, (DateTime StartedAt, bool StartedInWindow, int StatusCode)>();
                 void AddStop(int loomId, int statusCode, bool startedInWindow, DateTime startedAt, DateTime endedAt)
                 {
+                    if (loomId == 100) return; // Permanently excluded from calculations.
                     var seconds = Math.Max(0L, (long)Math.Floor((endedAt - startedAt).TotalSeconds));
                     var count = startedInWindow ? 1 : 0;
                     if (!summaries.TryGetValue(loomId, out var summary)) summary = new StopSummaryRow(loomId, 0, 0);
@@ -282,6 +283,7 @@ internal sealed class IlcaDatabase
 
         void AddStop(int loomId, int statusCode, bool startedInWindow, DateTime startedAt, DateTime endedAt)
         {
+            if (loomId == 100) return; // Permanently excluded from calculations.
             var seconds = Math.Max(0L, (long)Math.Floor((endedAt - startedAt).TotalSeconds));
             var count = startedInWindow ? 1 : 0;
             if (!summaries.TryGetValue(loomId, out var summary)) summary = new StopSummaryRow(loomId, 0, 0);
@@ -388,10 +390,14 @@ internal sealed class IlcaDatabase
     private static async Task InsertEventAsync(MySqlConnection connection, MySqlTransaction transaction, LoomEvent value, CancellationToken cancellationToken)
     {
         const string sql = """
-            INSERT IGNORE INTO evento
+            INSERT INTO evento
               (IdEvento, Timestamp, StatoProduzione, IdTelaio, Turno, Far, Armatura1, Armatura2, Disegno, LottoOrditoA, LottoOrditoB, LottoTrama, Dichiarazione, LunghezzaDaInizio, NumeroPezza, RFID, TempoEvento, Battute, Articolo, IdTrigger, NumeroSerie)
             VALUES
-              (@eventNumber, @timestamp, @status, @loomId, @shift, @far, @dobby1, @dobby2, @pattern, @warpLotA, @warpLotB, @weftLot, @declaration, @length, @piece, @rfid, @seconds, @picks, @article, 1, @serial);
+              (@eventNumber, @timestamp, @status, @loomId, @shift, @far, @dobby1, @dobby2, @pattern, @warpLotA, @warpLotB, @weftLot, @declaration, @length, @piece, @rfid, @seconds, @picks, @article, 1, @serial)
+            ON DUPLICATE KEY UPDATE
+              LunghezzaDaInizio=IF(VALUES(TempoEvento)>=TempoEvento,VALUES(LunghezzaDaInizio),LunghezzaDaInizio),
+              Battute=IF(VALUES(TempoEvento)>=TempoEvento,VALUES(Battute),Battute),
+              TempoEvento=GREATEST(TempoEvento,VALUES(TempoEvento));
             """;
         await using var command = new MySqlCommand(sql, connection, transaction);
         command.Parameters.AddWithValue("@eventNumber", value.EventNumber);

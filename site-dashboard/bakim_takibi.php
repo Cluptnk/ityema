@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-<?php include('head.php'); ?>
+<?php include('head.php'); require_once __DIR__.'/report_engine.php'; ?>
 <?php
-$looms = $db->exec("SELECT IdTelaio, NomeTelaio FROM telaio WHERE EnableTelaio = 1 ORDER BY IdTelaio");
-$today = date('Y-m-d');
+$looms = $db->exec("SELECT IdTelaio, NomeTelaio FROM telaio WHERE EnableTelaio = 1 AND IdTelaio<>100 ORDER BY IdTelaio");
+$today = date('Y-m-d'); if ((int)date('G')<7) $today=date('Y-m-d',strtotime('-1 day'));
 if (empty($_SESSION['maintenanceCsrf'])) $_SESSION['maintenanceCsrf'] = function_exists('random_bytes') ? bin2hex(random_bytes(24)) : sha1(uniqid('', true));
 ?>
 <body class="maintenance-page">
@@ -17,13 +17,13 @@ if (empty($_SESSION['maintenanceCsrf'])) $_SESSION['maintenanceCsrf'] = function
                 <header class="maintenance-heading"><span>ÜRETİM VE BAKIM</span><h1>Bakım Takibi</h1><p>Tekrarlayan duruşları önceliğe göre takip edin; işlemi atayın ve çözüldüğünde kayıt altına alın.</p></header>
                 <section class="maintenance-controls" aria-label="Bakım takip filtreleri">
                     <label>Tarih<input id="maintenance-date" type="date" value="<?php echo $today; ?>"></label>
-                    <label>Vardiya / dönem<select id="maintenance-window"><option value="all">Tüm vardiyalar</option><option value="s1">07:00–15:00 vardiyası</option><option value="s2">15:00–23:00 vardiyası</option><option value="s3">23:00–07:00 vardiyası</option><option value="day">24 saat (00:00–24:00)</option></select></label>
+                    <label>Vardiya / dönem<select id="maintenance-window"><option value="all">Tüm vardiyalar (07:00–ertesi gün 07:00)</option><option value="s1">07:00–15:00 vardiyası</option><option value="s2">15:00–23:00 vardiyası</option><option value="s3">23:00–07:00 vardiyası</option><option value="day">24 saat (00:00–24:00)</option></select></label>
                     <label>Tezgâh<select id="maintenance-loom"><option value="0">Tüm tezgâhlar</option><?php foreach ($looms as $loom) { ?><option value="<?php echo (int) $loom['IdTelaio']; ?>"><?php echo (int) $loom['IdTelaio'] . ' ' . htmlspecialchars($loom['NomeTelaio'], ENT_QUOTES, 'UTF-8'); ?></option><?php } ?></select></label>
                     <button id="maintenance-run" type="button"><i class="fa fa-refresh"></i> Listeyi yenile</button>
                 </section>
                 <section class="maintenance-kpis" aria-live="polite">
-                    <article class="maintenance-kpi-critical"><span>Kritik öncelik</span><strong id="maintenance-critical">—</strong><small>Uzun veya sık tekrarlayan duruş</small></article>
-                    <article class="maintenance-kpi-high"><span>Yüksek öncelik</span><strong id="maintenance-high">—</strong><small>İzlenmesi gereken duruş</small></article>
+                    <article class="maintenance-kpi-critical"><span>Kritik öncelikli kayıt</span><strong id="maintenance-critical">—</strong><small>Uzun veya sık tekrarlayan duruş</small></article>
+                    <article class="maintenance-kpi-high"><span>Yüksek öncelikli kayıt</span><strong id="maintenance-high">—</strong><small>İzlenmesi gereken duruş</small></article>
                     <article><span>Açık işlem</span><strong id="maintenance-open">—</strong><small>Henüz işleme alınmamış</small></article>
                     <article><span>İşlemde</span><strong id="maintenance-progress">—</strong><small>Bakım ekibinde</small></article>
                 </section>
@@ -44,7 +44,7 @@ if (empty($_SESSION['maintenanceCsrf'])) $_SESSION['maintenanceCsrf'] = function
     <script>window.maintenanceCsrf=<?php echo json_encode($_SESSION['maintenanceCsrf']); ?>;</script>
     <link rel="stylesheet" href="css/maintenance.css?v=20260923-1">
     <link rel="stylesheet" href="css/report-table-sort.css?v=20260923-1">
-    <script src="js/maintenance.js?v=20260923-1"></script>
+    <script src="js/report-quality.js?v=20261022-6"></script><script src="js/maintenance.js?v=20261022-6"></script>
     <script src="js/report-table-sort.js?v=20260923-2"></script>
 </body>
 </html>

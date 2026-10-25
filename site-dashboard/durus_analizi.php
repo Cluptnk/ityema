@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-<?php include('head.php'); ?>
+<?php include('head.php'); require_once __DIR__.'/report_engine.php'; ?>
 <?php
-$looms = $db->exec("SELECT IdTelaio, NomeTelaio FROM telaio WHERE EnableTelaio = 1 ORDER BY IdTelaio");
+$looms = $db->exec("SELECT IdTelaio, NomeTelaio FROM telaio WHERE EnableTelaio = 1 AND IdTelaio<>100 ORDER BY IdTelaio");
 $today = date('Y-m-d');
 ?>
 <body class="reports-page">
@@ -52,13 +52,13 @@ $today = date('Y-m-d');
                     </label>
                 </section>
                 <section class="report-summary" aria-live="polite">
-                    <article><span>Toplam duruş kaydı</span><strong id="report-total-count">—</strong></article>
-                    <article><span>Toplam duruş süresi</span><strong id="report-total-duration">—</strong></article>
+                    <article><span>Kayıtlı duruş başlangıcı</span><strong id="report-total-count">—</strong></article>
+                    <article><span>Kayıtlı duruş süresi</span><strong id="report-total-duration">—</strong></article>
                     <article><span>Farklı duruş nedeni</span><strong id="report-cause-count">—</strong></article>
                 </section>
                 <section class="report-content">
                     <article class="report-chart-panel">
-                        <h2>Duruş süresi dağılımı</h2>
+                        <h2>Kayıtlı duruş süresi dağılımı</h2>
                         <div class="report-chart-layout">
                             <div id="report-pie" class="report-pie"><span>Veri<br>bekleniyor</span></div>
                             <ul id="report-legend" class="report-legend"></ul>
@@ -83,7 +83,7 @@ $today = date('Y-m-d');
     <?php include('footer.php'); ?>
     <link rel="stylesheet" href="css/reports.css?v=20260922-6">
     <link rel="stylesheet" href="css/report-table-sort.css?v=20260923-1">
-    <script src="js/reports.js?v=20260922-10"></script>
+    <script src="js/report-quality.js?v=20261022-6"></script><script src="js/reports.js?v=20261022-6"></script>
     <script src="js/report-table-sort.js?v=20260923-2"></script>
 </body>
 </html>

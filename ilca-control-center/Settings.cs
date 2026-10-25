@@ -16,6 +16,8 @@ internal sealed class AppSettings
 
 internal sealed class LoomSettings
 {
+    [System.Text.Json.Serialization.JsonIgnore]
+    public string ClockStatus { get; set; } = "Henüz okunmadı";
     public int LoomId { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Host { get; set; } = string.Empty;

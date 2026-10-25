@@ -31,7 +31,7 @@ $rows = $db->exec(
         END AS AgeSeconds
      FROM telaio
      LEFT JOIN dato_rt ON dato_rt.IdTelaio = telaio.IdTelaio
-     WHERE telaio.EnableTelaio = 1
+     WHERE telaio.EnableTelaio = 1 AND telaio.IdTelaio<>100
      ORDER BY telaio.IdTelaio"
 );
 

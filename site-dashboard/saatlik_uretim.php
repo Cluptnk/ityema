@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-<?php include('head.php'); ?>
+<?php include('head.php'); require_once __DIR__.'/report_engine.php'; ?>
 <?php
-$looms = $db->exec("SELECT IdTelaio, NomeTelaio FROM telaio WHERE EnableTelaio = 1 ORDER BY IdTelaio");
+$looms = $db->exec("SELECT IdTelaio, NomeTelaio FROM telaio WHERE EnableTelaio = 1 AND IdTelaio<>100 ORDER BY IdTelaio");
 $today = date('Y-m-d');
 ?>
 <body class="hourly-production-page">
@@ -21,7 +21,7 @@ $today = date('Y-m-d');
                     <button id="hourly-production-run" type="button"><i class="fa fa-bar-chart"></i> Raporu getir</button>
                 </section>
                 <section class="hourly-production-kpis" aria-live="polite">
-                    <article><span>Toplam metraj</span><strong id="hourly-production-total">—</strong></article>
+                    <article><span>Kayıtlı metraj</span><strong id="hourly-production-total">—</strong></article>
                     <article><span>En yüksek saat</span><strong id="hourly-production-peak">—</strong></article>
                     <article><span>Saatlik ortalama</span><strong id="hourly-production-average">—</strong></article>
                     <article><span>Üretim görülen tezgâh</span><strong id="hourly-production-looms">—</strong></article>
@@ -34,14 +34,14 @@ $today = date('Y-m-d');
                     <header><h2>Saatlik üretim grafiği</h2><small>Her çubuk, ilgili saat içinde dokunan toplam metreyi gösterir.</small></header>
                     <div id="hourly-production-chart" class="hourly-production-chart"></div>
                 </section>
-                <p class="hourly-production-note"><i class="fa fa-info-circle"></i> Metraj, makinenin <em>LunghezzaDaInizio</em> üretim sayacındaki saatlik farktan metreye çevrilerek hesaplanır.</p>
+                <p class="hourly-production-note"><i class="fa fa-info-circle"></i> Kayıtlı olay metrajları saatlere süre oranıyla dağıtılır. Saatlerin ham toplamı günlük kayıtlı metrajla aynıdır; boş kayıtlar sıfır üretim sayılmaz.</p>
             </main>
         </div>
     </div>
     <?php include('footer.php'); ?>
     <link rel="stylesheet" href="css/hourly-production-report.css?v=20260923-1">
     <link rel="stylesheet" href="css/report-table-sort.css?v=20260923-1">
-    <script src="js/hourly-production-report.js?v=20260923-1"></script>
+    <script src="js/report-quality.js?v=20261022-6"></script><script src="js/hourly-production-report.js?v=20261022-6"></script>
     <script src="js/report-table-sort.js?v=20260923-2"></script>
 </body>
 </html>

@@ -16,10 +16,12 @@ internal static class LoomPoller
             connectionTimeout.CancelAfter(TimeSpan.FromSeconds(5));
             await client.ConnectAsync(loom.Host, loom.Port, connectionTimeout.Token);
 
+            using var responseTimeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            responseTimeout.CancelAfter(TimeSpan.FromSeconds(15));
             await using var stream = client.GetStream();
             var request = LoomProtocol.BuildMonitoringRequest(loom.EventCount);
-            await stream.WriteAsync(request, cancellationToken);
-            var response = await ReadResponseAsync(stream, cancellationToken);
+            await stream.WriteAsync(request, responseTimeout.Token);
+            var response = await ReadResponseAsync(stream, responseTimeout.Token);
 
             string? capturePath = null;
             if (diagnosticCaptureEnabled)
@@ -40,7 +42,7 @@ internal static class LoomPoller
         }
         catch (OperationCanceledException)
         {
-            return PollenResult.Fail(loom, started, $"{loom.Host}:{loom.Port} için 5 saniye içinde bağlantı kurulamadı. IP adresini ve TCP portunu kontrol edin.", true);
+            return PollenResult.Fail(loom, started, $"{loom.Host}:{loom.Port} bağlantısı veya yanıtı zaman aşımına uğradı. IP adresini ve TCP portunu kontrol edin.", true);
         }
         catch (SocketException exception)
         {
